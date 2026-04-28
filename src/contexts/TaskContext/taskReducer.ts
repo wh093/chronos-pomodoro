@@ -67,7 +67,4 @@ export function taskReducer(
       return { ...state, config: { ...action.payload } };
     }
   }
-
-  // sempre deve retornar o estado
-  return state;
 }
