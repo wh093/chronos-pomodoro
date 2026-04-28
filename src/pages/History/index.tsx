@@ -11,7 +11,7 @@ import { getTaskStatus } from '../../utils/getTaskStatus';
 import { sortTasks, type SortTasksOptions } from '../../utils/sortTasks';
 import { useEffect, useState } from 'react';
 import { showMessage } from '../../adapters/showMessage';
-import { TaskActionTypes } from '../../contexts/TaskContext/TaskActionTypes';
+import { TaskActionTypes } from '../../contexts/TaskContext/taskActions';
 
 export function History() {
   const { state, dispatch } = useTaskContext();
