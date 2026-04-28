@@ -2,14 +2,15 @@ import type { TaskStateModel } from '../../models/TaskStateModel';
 import { formatSecondsToMinutes } from '../../utils/formatSecondsToMinutes';
 import { getNextCycle } from '../../utils/getNextCycles';
 import { initialTaskState } from './initialTaskState';
-import { TaskActionTypes, type TaskActionModel } from './taskActions';
+import { type TaskActionModel } from './taskActions';
+import { TaskActionTypes } from './TaskActionTypes';
 
 export function taskReducer(
-  state: TaskStateModel, 
+  state: TaskStateModel,
   action: TaskActionModel,
 ): TaskStateModel {
-  switch(action.type) {
-    case TaskActionTypes.START_TASK: {      
+  switch (action.type) {
+    case TaskActionTypes.START_TASK: {
       const newTask = action.payload;
       const nextCycle = getNextCycle(state.currentCycle);
       const secondsRemaining = newTask.duration * 60;
@@ -21,9 +22,9 @@ export function taskReducer(
         secondsRemaining,
         formattedSecondsRemaining: formatSecondsToMinutes(secondsRemaining),
         tasks: [...state.tasks, newTask],
-      }
+      };
     }
-    case TaskActionTypes.INTERRUPT_TASK: {   
+    case TaskActionTypes.INTERRUPT_TASK: {
       return {
         ...state,
         activeTask: null,
@@ -37,7 +38,7 @@ export function taskReducer(
         }),
       };
     }
-    case TaskActionTypes.COMPLETE_TASK: {   
+    case TaskActionTypes.COMPLETE_TASK: {
       return {
         ...state,
         activeTask: null,
@@ -52,17 +53,22 @@ export function taskReducer(
       };
     }
     case TaskActionTypes.RESET_STATE: {
-      return {...initialTaskState};
+      return { ...initialTaskState };
     }
     case TaskActionTypes.COUNT_DOWN: {
       return {
         ...state,
         secondsRemaining: action.payload.secondsRemaining,
-        formattedSecondsRemaining: formatSecondsToMinutes(action.payload.secondsRemaining)
+        formattedSecondsRemaining: formatSecondsToMinutes(
+          action.payload.secondsRemaining,
+        ),
       };
+    }
+    case TaskActionTypes.CHANGE_SETTINGS: {
+      return { ...state, config: { ...action.payload } };
     }
   }
 
-  // sempre deve retornar o estado 
+  // sempre deve retornar o estado
   return state;
 }

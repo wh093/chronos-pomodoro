@@ -11,7 +11,7 @@ import { getTaskStatus } from '../../utils/getTaskStatus';
 import { sortTasks, type SortTasksOptions } from '../../utils/sortTasks';
 import { useEffect, useState } from 'react';
 import { showMessage } from '../../adapters/showMessage';
-import { TaskActionTypes } from '../../contexts/TaskContext/taskActions';
+import { TaskActionTypes } from '../../contexts/TaskContext/TaskActionTypes';
 
 export function History() {
   const { state, dispatch } = useTaskContext();
@@ -28,6 +28,7 @@ export function History() {
   );
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setSortTaskOptions(prevState => ({
       ...prevState,
       tasks: sortTasks({
@@ -39,8 +40,13 @@ export function History() {
   }, [state.tasks]);
 
   useEffect(() => {
+    document.title = 'Histórico - Chronos Pomodoro';
+  }, []);
+
+  useEffect(() => {
     if (!confirmClearHistory) return;
 
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setConfirmClearHistory(false);
 
     dispatch({ type: TaskActionTypes.RESET_STATE });
@@ -49,8 +55,8 @@ export function History() {
   useEffect(() => {
     return () => {
       showMessage.dismiss();
-    }
-  }, [])
+    };
+  }, []);
 
   function handleSortTasks({ field }: Pick<SortTasksOptions, 'field'>) {
     const newDirection = sortTasksOptions.direction === 'desc' ? 'asc' : 'desc';
